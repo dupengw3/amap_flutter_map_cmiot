@@ -14,6 +14,7 @@ dependencies:
 
   permission_handler: ^5.0.1+1
   flutter_plugin_android_lifecycle: ^1.0.2
+  widget_to_image: ^1.0.4
 
   amap_flutter_map:
     # When depending on this package from a real application you should use:
@@ -31,6 +32,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
+    
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 

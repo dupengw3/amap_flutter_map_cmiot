@@ -12,6 +12,8 @@ import 'package:amap_flutter_map/amap_flutter_map.dart';
 import 'package:amap_flutter_map/amap_flutter_base.dart';
 import 'dart:math';
 
+import 'package:widget_to_image/widget_to_image.dart';
+
 class MarkerConfigDemoPage extends BasePage {
   MarkerConfigDemoPage(String title, String subTitle) : super(title, subTitle);
 
@@ -34,7 +36,7 @@ class _State extends State<_Body> {
   Map<String, Marker> _markers = <String, Marker>{};
   BitmapDescriptor _markerIcon;
   String selectedMarkerId;
-
+   
   void _onMapCreated(AMapController controller) {}
 
   ///通过BitmapDescriptor.fromAssetImage的方式获取图片
@@ -65,6 +67,36 @@ class _State extends State<_Body> {
 
     bitmapIcon.future.then((value) => _updateBitmap(value));
   }
+
+
+ Future<void> _createMarkerImageFromWidget(
+      BuildContext context,String text) async {
+
+   final Completer<BitmapDescriptor> bitmapIcon =
+        Completer<BitmapDescriptor>();
+
+   WidgetToImage.widgetToImage(
+      new Directionality(
+          textDirection: TextDirection
+              .ltr, //RichText widgets require a Directionality widget ancestor.
+          child: Container(
+              width: 100,
+              height: 100,
+              color: Colors.yellow,
+              child: Center(
+                  child: Text(
+                text,
+                style: TextStyle(color: Colors.red),
+              )))),
+    ).then((value) {
+    final BitmapDescriptor bitmap =
+        BitmapDescriptor.fromBytes(value.buffer.asUint8List());
+      bitmapIcon.complete(bitmap);
+    });
+    bitmapIcon.future.then((value) => _updateBitmap(value));
+    return ;
+  }
+
 
   void _updateBitmap(BitmapDescriptor bitmap) {
     setState(() {
@@ -233,14 +265,17 @@ class _State extends State<_Body> {
   @override
   Widget build(BuildContext context) {
     ///以下几种获取自定图片的方式使用其中一种即可。
-    //最简单的方式
-    if (null == _markerIcon) {
-      _markerIcon = BitmapDescriptor.fromIconPath('assets/location_marker.png');
-    }
+   _createMarkerImageFromWidget(context,"${_markers.length}");
 
-    //通过BitmapDescriptor.fromAssetImage的方式获取图片
+    ///
+    ///
+    //1最简单的方式
+    // if (null == _markerIcon) {
+    //   _markerIcon = BitmapDescriptor.fromIconPath('assets/location_marker.png');
+    // }
+    //2通过BitmapDescriptor.fromAssetImage的方式获取图片
     // _createMarkerImageFromAsset(context);
-    //通过BitmapDescriptor.fromBytes的方式获取图片
+    //3通过BitmapDescriptor.fromBytes的方式获取图片
     // _createMarkerImageFromBytes(context);
 
     final AMapWidget map = AMapWidget(
