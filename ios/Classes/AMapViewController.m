@@ -480,7 +480,7 @@
     CLLocationCoordinate2D southwest = MACoordinateForMapPoint(southwestPoint);
     CLLocationCoordinate2D northeast = MACoordinateForMapPoint(northeastPoint);
 
-    NSMutableDictionary *dict1 = [NSMutableDictionary dictionaryWithCapacity:4];
+    NSMutableDictionary *dict1 = [NSMutableDictionary dictionaryWithCapacity:2];
     if (CLLocationCoordinate2DIsValid(southwest)) {
         [dict1 setObject:[AMapConvertUtil jsonArrayFromCoordinate:southwest] forKey:@"southwest"];
     }

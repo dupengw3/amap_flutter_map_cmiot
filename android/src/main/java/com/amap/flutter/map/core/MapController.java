@@ -296,6 +296,20 @@ public class MapController
             arguments.put("position", ConvertUtil.cameraPositionToMap(cameraPosition));
             methodChannel.invokeMethod("camera#onMoveEnd", arguments);
             LogUtil.i(CLASS_NAME, "onCameraChangeFinish===>" + arguments);
+
+            VisibleRegion visibleRegion = amap.getProjection().getVisibleRegion();
+            LatLngBounds latLngBounds = visibleRegion.latLngBounds; //由可视区域的四个顶点形成的经纬度范围
+            LatLng southwest = latLngBounds.southwest; //西南角坐标
+            LatLng northeast = latLngBounds.northeast; //东北角坐标
+            Map<String,Object> arguments2 = new HashMap<>(2);
+            arguments2.put("southwest", ConvertUtil.latLngToList(southwest));
+            arguments2.put("northeast", ConvertUtil.latLngToList(northeast));//
+            final  Map<String,Object> mapData = new HashMap<>(1);
+            mapData.put("region",arguments2);
+            System.out.println(southwest.latitude+" "+southwest.longitude);
+            methodChannel.invokeMethod("camera#onVisiableRegionMoveEnd",mapData);
+            LogUtil.i(CLASS_NAME, "onVisiableRegionMoveEnd==>" + mapData.get("region"));
+            
         }
     }
 
