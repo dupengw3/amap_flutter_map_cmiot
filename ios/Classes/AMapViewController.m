@@ -211,6 +211,22 @@
         [weakSelf.mapView clearDisk];
         result(nil);
     }];
+    [self.channel addMethodName:@"map#visibleMapBounds" withHandler:^(FlutterMethodCall * _Nonnull call, FlutterResult  _Nonnull result) {
+        MAMapRect rect = [weakSelf.mapView visibleMapRect];
+        MAMapPoint point = rect.origin;
+        MAMapSize size = rect.size;
+        MAMapPoint southwestPoint = MAMapPointMake(point.x,point.y + size.height);
+        MAMapPoint northeastPoint = MAMapPointMake(point.x + size.width, point.y);
+        CLLocationCoordinate2D southwest = MACoordinateForMapPoint(southwestPoint);
+        CLLocationCoordinate2D northeast = MACoordinateForMapPoint(northeastPoint);
+        NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithCapacity:2];
+        if (CLLocationCoordinate2DIsValid(southwest) && CLLocationCoordinate2DIsValid(northeast)) {
+            [dict setObject:[AMapConvertUtil jsonArrayFromCoordinate:southwest] forKey:@"southwest"];
+            [dict setObject:[AMapConvertUtil jsonArrayFromCoordinate:northeast] forKey:@"northeast"];
+        }
+        result(dict);
+
+    }];
 }
 
 //MARK: MAMapViewDelegate
@@ -479,7 +495,8 @@
     MAMapPoint northeastPoint = MAMapPointMake(point.x + size.width, point.y);
     CLLocationCoordinate2D southwest = MACoordinateForMapPoint(southwestPoint);
     CLLocationCoordinate2D northeast = MACoordinateForMapPoint(northeastPoint);
-
+//    MACoordinateBounds bounds = MACoordinateBoundsMake(northeast, southwest);
+    
     NSMutableDictionary *dict1 = [NSMutableDictionary dictionaryWithCapacity:2];
     if (CLLocationCoordinate2DIsValid(southwest)) {
         [dict1 setObject:[AMapConvertUtil jsonArrayFromCoordinate:southwest] forKey:@"southwest"];

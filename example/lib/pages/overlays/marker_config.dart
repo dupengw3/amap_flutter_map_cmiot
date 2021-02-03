@@ -36,7 +36,7 @@ class _State extends State<_Body> {
   Map<String, Marker> _markers = <String, Marker>{};
   BitmapDescriptor _markerIcon;
   String selectedMarkerId;
-   
+  
   void _onMapCreated(AMapController controller) {}
 
   ///通过BitmapDescriptor.fromAssetImage的方式获取图片
@@ -76,18 +76,25 @@ class _State extends State<_Body> {
         Completer<BitmapDescriptor>();
 
    WidgetToImage.widgetToImage(
-      new Directionality(
-          textDirection: TextDirection
-              .ltr, //RichText widgets require a Directionality widget ancestor.
-          child: Container(
-              width: 100,
-              height: 100,
-              color: Colors.yellow,
-              child: Center(
-                  child: Text(
-                text,
-                style: TextStyle(color: Colors.red),
-              )))),
+       ClipRRect(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(50),
+          topRight: Radius.circular(50),
+          bottomRight: Radius.circular(50),
+          bottomLeft: Radius.circular(50),
+        ),
+        child: new Directionality(
+            textDirection: TextDirection.ltr, 
+            child: Container(
+            width: 100,
+            height: 100,
+            color: Colors.yellow,
+            child: Center(
+                child: Text(
+              text,
+              style: TextStyle(color: Colors.red,fontSize: 20),
+            )))),
+      ),
     ).then((value) {
     final BitmapDescriptor bitmap =
         BitmapDescriptor.fromBytes(value.buffer.asUint8List());
@@ -136,6 +143,7 @@ class _State extends State<_Body> {
     final Marker tappedMarker = _markers[markerId];
     final String title = tappedMarker.infoWindow.title;
     print('$title markerId: $markerId 被拖拽到了: $position');
+  
   }
 
   void _remove() {

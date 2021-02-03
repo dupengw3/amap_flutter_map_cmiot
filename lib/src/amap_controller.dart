@@ -145,6 +145,13 @@ class AMapController {
     return _methodChannel.getMapContentApprovalNumber(mapId: mapId);
   }
 
+
+
+  Future<LatLngBounds> getMapvisibleMapBounds() async{
+    return LatLngBounds.fromMap(await _methodChannel.getMapvisibleMapBounds(mapId: mapId));
+    
+  }
+
   /// 获取地图审图号（卫星地图)
   ///
   /// 任何使用高德地图API调用地图服务的应用必须在其应用中对外透出审图号

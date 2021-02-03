@@ -236,6 +236,8 @@ class _MapUiBodyState extends State<_MapUiBody> {
         defaultValue: _tiltGesturesEnabled,
         onSwitchChanged: (value) => {
           setState(() {
+         _controller.getMapvisibleMapBounds().then((value) => print(value.northeast.latitude));
+
             _tiltGesturesEnabled = value;
           })
         },
@@ -398,6 +400,8 @@ class _MapUiBodyState extends State<_MapUiBody> {
 
   //移动地图中心点到首开广场
   void _moveCameraToShoukai() {
+
+
     _controller.moveCamera(CameraUpdate.newCameraPosition(CameraPosition(
         target: LatLng(39.993306, 116.473004),
         zoom: 18,

@@ -96,6 +96,18 @@ public class MapController
                     result.success(amap.getMapContentApprovalNumber());
                 }
                 break;
+            case Const.METHOD_MAP_VISIABLE_MAPBOUNDS:
+                if (null != amap) {
+                    VisibleRegion visibleRegion = amap.getProjection().getVisibleRegion();
+                    LatLngBounds latLngBounds = visibleRegion.latLngBounds; //由可视区域的四个顶点形成的经纬度范围
+                    LatLng southwest = latLngBounds.southwest; //西南角坐标
+                    LatLng northeast = latLngBounds.northeast; //东北角坐标
+                    Map<String,Object> arguments = new HashMap<>(2);
+                    arguments.put("southwest", ConvertUtil.latLngToList(southwest));
+                    arguments.put("northeast", ConvertUtil.latLngToList(northeast));//
+                    result.success(arguments);
+                }
+                break;
             case Const.METHOD_MAP_UPDATE:
                 if (amap != null) {
                     ConvertUtil.interpretAMapOptions(call.argument("options"), this);
