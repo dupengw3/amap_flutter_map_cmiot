@@ -91,7 +91,7 @@
   }
   if (fabs(scale - 1) > 1e-3) {
     return [UIImage imageWithCGImage:[image CGImage]
-                               scale:(image.scale * scale)
+                               scale:(image.scale * 1)
                          orientation:(image.imageOrientation)];
   }
   return image;
