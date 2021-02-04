@@ -27,7 +27,7 @@ import java.util.Map;
 
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
-
+import com.amap.api.maps.model.VisibleRegion;
 /**
  * @author whm
  * @date 2020/11/11 7:00 PM
