@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 import 'package:amap_flutter_map/amap_flutter_map.dart';
-import 'package:amap_flutter_map/amap_flutter_base.dart';
+import 'package:amap_flutter_base/amap_flutter_base.dart';
 
 class PolylineDemoPage extends BasePage {
   PolylineDemoPage(String title, String subTitle) : super(title, subTitle);

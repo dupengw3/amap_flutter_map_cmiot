@@ -5,7 +5,7 @@
 import 'dart:ui' show hashValues, Offset;
 import 'package:amap_flutter_map/src/types/base_overlay.dart';
 import 'package:flutter/foundation.dart' show ValueChanged, VoidCallback;
-import '../../amap_flutter_base.dart';
+import 'package:amap_flutter_base/amap_flutter_base.dart';
 import 'package:meta/meta.dart';
 import 'bitmap.dart';
 import 'base_overlay.dart';

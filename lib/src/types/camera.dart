@@ -1,4 +1,4 @@
-import '../../amap_flutter_base.dart';
+import 'package:amap_flutter_base/amap_flutter_base.dart';
 import 'package:flutter/cupertino.dart';
 
 /// 相机位置，包含可视区域的位置参数。

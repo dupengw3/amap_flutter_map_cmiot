@@ -5,7 +5,7 @@
 import 'dart:async' show Future;
 import 'dart:typed_data' show Uint8List;
 
-import '../../amap_flutter_base.dart' show AMapUtil;
+import 'package:amap_flutter_base/amap_flutter_base.dart' show AMapUtil;
 import 'package:flutter/material.dart'
     show ImageConfiguration, AssetImage, AssetBundleImageKey;
 import 'package:flutter/services.dart' show AssetBundle;

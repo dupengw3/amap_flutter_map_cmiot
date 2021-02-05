@@ -1,7 +1,8 @@
 import 'dart:async';
 import 'dart:typed_data';
 
-import '../../amap_flutter_base.dart';
+import 'package:amap_flutter_base/amap_flutter_base.dart';
+import 'package:amap_flutter_map/amap_flutter_map.dart';
 import 'package:amap_flutter_map/src/core/amap_flutter_platform.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -198,7 +199,7 @@ class MethodChannelAMapFlutterMap implements AMapFlutterPlatform {
            case 'camera#onVisiableRegionMoveEnd':
         try {
           _mapEventStreamController.add(CameraVisiableRegionMoveEndEvent(
-              mapId, LatLngBounds.fromMap(call.arguments['region'])));
+              mapId, RegionBounds.fromMap(call.arguments['region'])));
         } catch (e) {
           print("camera#onVisiableRegionMoveEnd error===>" + e.toString());
         }

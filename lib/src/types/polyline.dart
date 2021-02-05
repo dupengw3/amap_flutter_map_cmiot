@@ -5,7 +5,7 @@
 import 'package:amap_flutter_map/src/types/bitmap.dart';
 import 'package:flutter/foundation.dart' show listEquals;
 import 'package:flutter/material.dart' show Color;
-import '../../amap_flutter_base.dart';
+import 'package:amap_flutter_base/amap_flutter_base.dart';
 import 'package:meta/meta.dart';
 import 'base_overlay.dart';
 

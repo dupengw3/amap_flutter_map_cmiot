@@ -15,7 +15,7 @@ dependencies:
   plugin_platform_interface: ^1.0.2
   stream_transform: ^1.2.0
 
-  # amap_flutter_base: ^1.0.1
+  amap_flutter_base: ^1.0.1
 
 dev_dependencies:
   flutter_test:

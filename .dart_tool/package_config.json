@@ -8,6 +8,12 @@
       "languageVersion": "2.2"
     },
     {
+      "name": "amap_flutter_base",
+      "rootUri": "file:///Users/dupeng/.pub-cache/hosted/pub.flutter-io.cn/amap_flutter_base-1.0.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.7"
+    },
+    {
       "name": "analyzer",
       "rootUri": "file:///Users/dupeng/.pub-cache/hosted/pub.flutter-io.cn/analyzer-0.40.6",
       "packageUri": "lib/",
@@ -476,7 +482,7 @@
       "languageVersion": "2.7"
     }
   ],
-  "generated": "2021-01-28T09:40:57.585032Z",
+  "generated": "2021-02-05T01:52:18.597444Z",
   "generator": "pub",
-  "generatorVersion": "2.10.4"
+  "generatorVersion": "2.10.5"
 }

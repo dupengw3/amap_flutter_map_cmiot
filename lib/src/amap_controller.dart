@@ -2,6 +2,98 @@ part of amap_flutter_map;
 
 final MethodChannelAMapFlutterMap _methodChannel = AMapFlutterPlatform.instance;
 
+
+/// 经纬度对齐的矩形.
+class RegionBounds {
+  /// 使用传入的西南角坐标[southwest]和东北角坐标[northeast]创建一个矩形区域.
+  RegionBounds({@required this.southwest, @required this.northeast}) {
+    try {
+      assert(southwest != null, '西南角坐标不能为null');
+      assert(northeast != null, '东北角坐标不能为null');
+      assert(southwest.latitude <= northeast.latitude,
+          '西南角纬度超过了东北角纬度(${southwest.latitude} > ${northeast.latitude})');
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  /// 西南角坐标.
+  final LatLng southwest;
+
+  /// 东北角坐标.
+  final LatLng northeast;
+
+  dynamic toJson() {
+    if (null == southwest ||
+        null == northeast ||
+        southwest.latitude > northeast.latitude) {
+      return null;
+    }
+    return <dynamic>[southwest.toJson(), northeast.toJson()];
+  }
+
+  /// 判断矩形区域是否包含传入的经纬度[point].
+  bool contains(LatLng point) {
+    try {
+      return _containsLatitude(point.latitude) &&
+          _containsLongitude(point.longitude);
+    } catch (e) {
+      print(e);
+    }
+    return false;
+  }
+
+  bool _containsLatitude(double lat) {
+    return (southwest.latitude <= lat) && (lat <= northeast.latitude);
+  }
+
+  bool _containsLongitude(double lng) {
+    if (southwest.longitude <= northeast.longitude) {
+      return southwest.longitude <= lng && lng <= northeast.longitude;
+    } else {
+      return southwest.longitude <= lng || lng <= northeast.longitude;
+    }
+  }
+
+  @visibleForTesting
+  static RegionBounds fromList(dynamic json) {
+    if (json == null) {
+      return null;
+    }
+    return RegionBounds(
+      southwest: LatLng.fromJson(json[0]),
+      northeast: LatLng.fromJson(json[1]),
+    );
+  }
+
+/// 主要在插件内部使用
+  static RegionBounds fromMap(dynamic json) {
+    if (json == null) {
+      return null;
+    }
+    return RegionBounds(
+      southwest: LatLng.fromJson(json['southwest']),
+      northeast: LatLng.fromJson(json['northeast']),
+    );
+  }
+
+  @override
+  String toString() {
+    return '$runtimeType($southwest, $northeast)';
+  }
+
+  @override
+  bool operator ==(Object o) {
+    return o is RegionBounds &&
+        o.southwest == southwest &&
+        o.northeast == northeast;
+  }
+
+  @override
+  int get hashCode => hashValues(southwest, northeast);
+}
+
+
 /// 地图通信中心
 class AMapController {
   final int mapId;
@@ -147,8 +239,8 @@ class AMapController {
 
 
 
-  Future<LatLngBounds> getMapvisibleMapBounds() async{
-    return LatLngBounds.fromMap(await _methodChannel.getMapvisibleMapBounds(mapId: mapId));
+  Future<RegionBounds> getMapvisibleMapBounds() async{
+    return RegionBounds.fromMap(await _methodChannel.getMapvisibleMapBounds(mapId: mapId));
     
   }
 

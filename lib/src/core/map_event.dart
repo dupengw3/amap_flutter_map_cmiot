@@ -1,4 +1,4 @@
-import '../../amap_flutter_base.dart';
+import 'package:amap_flutter_base/amap_flutter_base.dart';
 import 'package:amap_flutter_map/amap_flutter_map.dart';
 
 ///地图事件处理
@@ -33,8 +33,8 @@ class CameraPositionMoveEndEvent extends MapEvent<CameraPosition> {
       : super(mapId, value);
 }
 
-class CameraVisiableRegionMoveEndEvent extends MapEvent<LatLngBounds> {
-  CameraVisiableRegionMoveEndEvent(int mapId,LatLngBounds value)
+class CameraVisiableRegionMoveEndEvent extends MapEvent<RegionBounds> {
+  CameraVisiableRegionMoveEndEvent(int mapId,RegionBounds value)
       : super(mapId, value);
 }
 

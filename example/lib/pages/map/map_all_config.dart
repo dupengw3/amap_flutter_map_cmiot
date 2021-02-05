@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import 'package:amap_flutter_map/amap_flutter_base.dart';
+import 'package:amap_flutter_base/amap_flutter_base.dart';
 import 'package:amap_flutter_map_example/base_page.dart';
 import 'package:amap_flutter_map_example/const_config.dart';
 import 'package:amap_flutter_map_example/widgets/amap_switch_button.dart';
