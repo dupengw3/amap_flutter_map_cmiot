@@ -277,12 +277,12 @@ class MethodChannelAMapFlutterMap implements AMapFlutterPlatform {
   }
 
 
-//获取地图审图号（普通地图）
-  Future<dynamic> getMapvisibleMapBounds({
-    @required int mapId,
-  }) {
-    return channel(mapId).invokeMethod<dynamic>('map#visibleMapBounds');
-  }
+// //获取地图审图号（普通地图）
+//   Future<dynamic> getMapvisibleMapBounds({
+//     @required int mapId,
+//   }) {
+//     return channel(mapId).invokeMethod<dynamic>('map#visibleMapBounds');
+//   }
 
 
   //获取地图审图号（卫星地图）

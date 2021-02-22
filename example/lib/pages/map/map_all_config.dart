@@ -236,7 +236,6 @@ class _MapUiBodyState extends State<_MapUiBody> {
         defaultValue: _tiltGesturesEnabled,
         onSwitchChanged: (value) => {
           setState(() {
-         _controller.getMapvisibleMapBounds().then((value) => print(value.northeast.latitude));
 
             _tiltGesturesEnabled = value;
           })
