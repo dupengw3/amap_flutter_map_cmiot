@@ -8,6 +8,7 @@
 #import <Foundation/Foundation.h>
 #import <Flutter/Flutter.h>
 #import <MAMapKit/MAMapKit.h>
+#import <AMapSearchKit/AMapSearchKit.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

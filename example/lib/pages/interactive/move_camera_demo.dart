@@ -4,6 +4,7 @@ import 'package:amap_flutter_map/amap_flutter_map.dart';
 import 'package:amap_flutter_map_example/base_page.dart';
 import 'package:amap_flutter_map_example/const_config.dart';
 import 'package:amap_flutter_map_example/widgets/amap_gridview.dart';
+import 'package:amap_flutter_map_example/widgets/bottons.dart';
 import 'package:flutter/material.dart';
 
 class MoveCameraDemoPage extends BasePage {
@@ -211,14 +212,13 @@ class _BodyState extends State<_Body> {
     );
   }
 
-  FlatButton _createMyFloatButton(String label, Function onPressed) {
-    return FlatButton(
+  TextButton _createMyFloatButton(String label, Function onPressed) {
+    return textButton(
       onPressed: onPressed,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      borderRadius: 10,
       textColor: Colors.white,
-      highlightColor: Colors.blueAccent,
       child: Text(label),
-      color: Colors.blue,
+      backgroundcolor: Colors.blue,
     );
   }
 }

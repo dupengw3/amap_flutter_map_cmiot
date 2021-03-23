@@ -171,16 +171,16 @@ class _State extends State<_Body> {
                     children: <Widget>[
                       Column(
                         children: <Widget>[
-                          FlatButton(
+                          TextButton(
                             child: const Text('添加'),
                             onPressed: _add,
                           ),
-                          FlatButton(
+                          TextButton(
                             child: const Text('删除'),
                             onPressed:
                                 (selectedPolygonId == null) ? null : _remove,
                           ),
-                          FlatButton(
+                          TextButton(
                             child: const Text('修改边框宽度'),
                             onPressed: (selectedPolygonId == null)
                                 ? null
@@ -190,7 +190,7 @@ class _State extends State<_Body> {
                       ),
                       Column(
                         children: <Widget>[
-                          FlatButton(
+                          TextButton(
                             child: const Text('修改边框和填充色'),
                             onPressed: (selectedPolygonId == null)
                                 ? null
@@ -203,7 +203,7 @@ class _State extends State<_Body> {
                                 : _toggleVisible,
                             defaultValue: true,
                           ),
-                          FlatButton(
+                          TextButton(
                             child: const Text('修改坐标'),
                             onPressed: (selectedPolygonId == null)
                                 ? null

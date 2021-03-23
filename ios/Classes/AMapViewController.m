@@ -27,7 +27,7 @@
 #import "AMapConvertUtil.h"
 #import "FlutterMethodChannel+MethodCallDispatch.h"
 
-@interface AMapViewController ()<MAMapViewDelegate>
+@interface AMapViewController ()<MAMapViewDelegate,AMapSearchDelegate>
 
 @property (nonatomic,strong) MAMapView *mapView;
 @property (nonatomic,strong) FlutterMethodChannel *channel;
@@ -42,6 +42,11 @@
 @property (nonatomic,assign) BOOL mapInitCompleted;//地图初始化完成，首帧回调的标记
 
 @property (nonatomic,assign) MAMapRect initLimitMapRect;//初始化时，限制的地图范围；如果为{0,0,0,0},则没有限制
+@property (nonatomic,strong) AMapSearchAPI *search;
+@property (nonatomic,strong) FlutterResult   goecodeSearchResult;
+@property (nonatomic,strong) FlutterResult   reGoecodeSearchResult;
+
+
 
 @end
 
@@ -119,6 +124,29 @@
 - (UIView*)view {
     return _mapView;
 }
+
+- (AMapSearchAPI *)search{
+    if (_search == NULL) {
+        _search = [[AMapSearchAPI alloc] init];
+        _search.delegate = self;
+
+    }
+    return _search;
+}
+
+- (void)goecodeSearchBegin:(NSString *)address{
+    AMapGeocodeSearchRequest *geo = [[AMapGeocodeSearchRequest alloc] init];
+    geo.address = address;
+    [self.search AMapGeocodeSearch:geo];
+}
+
+- (void)reGoecodeSearchBegin:(CLLocationCoordinate2D)coordinate{
+    AMapReGeocodeSearchRequest *regeo = [[AMapReGeocodeSearchRequest alloc] init];
+    regeo.location = [AMapGeoPoint locationWithLatitude:coordinate.latitude longitude:coordinate.longitude];
+    regeo.requireExtension  = YES;
+    [self.search AMapReGoecodeSearch:regeo];
+}
+
 
 - (void)dealloc {
     if (MAMapRectIsEmpty(_initLimitMapRect) == NO) {//避免没有开始渲染，frame监听还存在时，快速销毁
@@ -227,10 +255,68 @@
         result(dict);
 
     }];
+    
+    [self.channel addMethodName:@"search#goecodeSearch" withHandler:^(FlutterMethodCall * _Nonnull call, FlutterResult  _Nonnull result) {
+        NSString *address = call.arguments[@"address"];
+        NSLog(@"goecodeSearchBegin=>");
+        NSLog(@"%@", address);
+        [weakSelf goecodeSearchBegin:address];
+        weakSelf.goecodeSearchResult = result;
+    }];
+    
+    [self.channel addMethodName:@"search#reGoecodeSearch" withHandler:^(FlutterMethodCall * _Nonnull call, FlutterResult  _Nonnull result) {
+        NSLog(@"reGoecodeSearchBegin=>");
+        NSArray *arr = call.arguments;
+        double latitude = [arr[0] doubleValue];
+        double longitude = [arr[1] doubleValue];
+
+        CLLocationCoordinate2D cor = CLLocationCoordinate2DMake(latitude, longitude);
+        NSLog(@"%f,%f", latitude,longitude);
+        [weakSelf reGoecodeSearchBegin:cor];
+        weakSelf.reGoecodeSearchResult = result;
+    }];
+    
+    
+}
+
+//MARK: AMapSearchDelegate
+//地理编码  address to coordinate
+- (void)onGeocodeSearchDone:(AMapGeocodeSearchRequest *)request response:(AMapGeocodeSearchResponse *)response
+{
+    if (response.geocodes.count == 0)
+    {
+
+        return;
+    }
+    NSLog(@"onGeocodeSearchDone=>");
+    NSLog(@"%f,%f", response.geocodes[0].location.latitude,response.geocodes[0].location.longitude);
+
+    CLLocationCoordinate2D cor = CLLocationCoordinate2DMake(response.geocodes[0].location.latitude, response.geocodes[0].location.longitude);
+    NSArray *latlng = [AMapConvertUtil jsonArrayFromCoordinate:cor];
+    _goecodeSearchResult(latlng);
+}
+
+//逆地理编码 coordinate to address
+- (void)onReGeocodeSearchDone:(AMapReGeocodeSearchRequest *)request response:(AMapReGeocodeSearchResponse *)response
+{
+    if (response.regeocode != nil)
+    {
+        NSLog(@"onReGeocodeSearchDone=>");
+        NSLog(@"%@", response.regeocode.formattedAddress);
+        _reGoecodeSearchResult(response.regeocode.formattedAddress);
+
+    }
+}
+
+- (void)AMapSearchRequest:(id)request didFailWithError:(NSError *)error
+{
+    
+    [_channel invokeMethod:@"search#onGeocodeSearchError" arguments:error.localizedDescription];
+
+    NSLog(@"Error: %@", error);
 }
 
 //MARK: MAMapViewDelegate
-
 //MARK: 定位相关回调
 
 - (void)mapView:(MAMapView *)mapView didChangeUserTrackingMode:(MAUserTrackingMode)mode animated:(BOOL)animated {
@@ -508,6 +594,11 @@
         [_channel invokeMethod:@"camera#onVisiableRegionMoveEnd" arguments:@{@"region":dict1}];
     }
 
+    
+    
+    
+ 
+    
     
 }
 

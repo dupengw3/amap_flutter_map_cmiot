@@ -6,7 +6,6 @@ import 'package:amap_flutter_map_example/const_config.dart';
 import 'package:amap_flutter_map_example/widgets/amap_switch_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
 class CustomMapStylePage extends BasePage {
   CustomMapStylePage(String title, String subTitle) : super(title, subTitle);
 

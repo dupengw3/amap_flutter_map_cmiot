@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:amap_flutter_map/amap_flutter_map.dart';
 import 'package:amap_flutter_map_example/base_page.dart';
 import 'package:amap_flutter_map_example/const_config.dart';
+import 'package:amap_flutter_map_example/widgets/bottons.dart';
 import 'package:flutter/material.dart';
 
 class SnapshotPage extends BasePage {
@@ -37,16 +38,14 @@ class _SnapShotState extends State<_SnapShotBody> {
           ),
           Padding(
             padding: const EdgeInsets.only(top: 10, bottom: 10),
-            child: SizedBox(
+            child: Container(
               height: 40,
               width: 100,
-              child: FlatButton(
+               padding: EdgeInsets.symmetric(horizontal: 8),
+              child: textButton(
                 child: Text('截屏'),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(4),
-                ),
-                padding: EdgeInsets.symmetric(horizontal: 8),
-                color: Colors.blue,
+                borderRadius: 10,
+                backgroundcolor: Colors.blue,
                 textColor: Colors.white,
                 onPressed: () async {
                   final imageBytes = await _mapController?.takeSnapshot();

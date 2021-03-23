@@ -29,7 +29,7 @@ class _AMapRadioGroupState extends State<AMapRadioGroup> {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> radioList = List<Widget>();
+    List<Widget> radioList = [];
     _groupValue = widget.groupValue ?? null;
     Widget _myRadio(String label, dynamic radioValue) {
       return Row(
@@ -54,7 +54,7 @@ class _AMapRadioGroupState extends State<AMapRadioGroup> {
 
     if (widget.radioValueMap != null) {
       if (radioList == null) {
-        radioList = List<Widget>();
+        radioList = [];
       }
       widget.radioValueMap.forEach((key, value) {
         radioList.add(_myRadio(key, value));

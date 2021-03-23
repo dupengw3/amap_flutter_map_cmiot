@@ -1,4 +1,5 @@
 import 'package:amap_flutter_map_example/base_page.dart';
+import 'package:amap_flutter_map_example/widgets/bottons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -96,14 +97,14 @@ class _State extends State<_Body> {
           ),
           Expanded(
               flex: 1,
-              child: FlatButton(
+              child: textButton(
                 onPressed: _add,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10)),
+                borderRadius: 10,
+                // shape: RoundedRectangleBorder(
+                //     borderRadius: BorderRadius.circular(10)),
                 textColor: Colors.white,
-                highlightColor: Colors.blueAccent,
                 child: Text('添加大地曲线'),
-                color: Colors.blue,
+                backgroundcolor: Colors.blue,
               )),
         ],
       ),

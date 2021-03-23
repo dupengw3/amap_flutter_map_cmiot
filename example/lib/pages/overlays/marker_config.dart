@@ -40,6 +40,7 @@ class _State extends State<_Body> {
   void _onMapCreated(AMapController controller) {}
 
   ///通过BitmapDescriptor.fromAssetImage的方式获取图片
+  // ignore: unused_element
   Future<void> _createMarkerImageFromAsset(BuildContext context) async {
     if (_markerIcon == null) {
       final ImageConfiguration imageConfiguration =
@@ -50,6 +51,7 @@ class _State extends State<_Body> {
   }
 
   ///通过BitmapDescriptor.fromBytes的方式获取图片
+  // ignore: unused_element
   Future<void> _createMarkerImageFromBytes(BuildContext context) async {
     final Completer<BitmapDescriptor> bitmapIcon =
         Completer<BitmapDescriptor>();
@@ -312,27 +314,27 @@ class _State extends State<_Body> {
                     children: <Widget>[
                       Column(
                         children: <Widget>[
-                          FlatButton(
+                          TextButton(
                             child: const Text('添加'),
                             onPressed: _add,
                           ),
-                          FlatButton(
+                          TextButton(
                             child: const Text('移除'),
                             onPressed:
                                 (selectedMarkerId == null) ? null : _remove,
                           ),
-                          FlatButton(
+                          TextButton(
                             child: const Text('更新InfoWidow'),
                             onPressed:
                                 (selectedMarkerId == null) ? null : _changeInfo,
                           ),
-                          FlatButton(
+                          TextButton(
                             child: const Text('修改锚点'),
                             onPressed: (selectedMarkerId == null)
                                 ? null
                                 : _changeAnchor,
                           ),
-                          FlatButton(
+                          TextButton(
                             child: const Text('修改透明度'),
                             onPressed: (selectedMarkerId == null)
                                 ? null
@@ -342,7 +344,7 @@ class _State extends State<_Body> {
                       ),
                       Column(
                         children: <Widget>[
-                          FlatButton(
+                          TextButton(
                             child: const Text('全部移除'),
                             onPressed: _markers.length > 0 ? _removeAll : null,
                           ),
@@ -360,13 +362,13 @@ class _State extends State<_Body> {
                                 : _toggleVisible,
                             defaultValue: true,
                           ),
-                          FlatButton(
+                          TextButton(
                             child: const Text('修改坐标'),
                             onPressed: (selectedMarkerId == null)
                                 ? null
                                 : _changePosition,
                           ),
-                          FlatButton(
+                          TextButton(
                             child: const Text('修改旋转角度'),
                             onPressed: (selectedMarkerId == null)
                                 ? null

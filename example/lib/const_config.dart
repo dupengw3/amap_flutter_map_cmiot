@@ -2,6 +2,6 @@ import 'package:amap_flutter_base/amap_flutter_base.dart';
 
 class ConstConfig {
   static const AMapApiKey amapApiKeys = AMapApiKey(
-      androidKey: '900f72eeee0f21e435cebb0ef155582a',
-      iosKey: '4dfdec97b7bf0b8c13e94777103015a9');
+      androidKey: 'e3cd32f07efb97017026a99a2df8093f',
+      iosKey: 'b118d33762634b67fdaa10af34150b7f');
 }

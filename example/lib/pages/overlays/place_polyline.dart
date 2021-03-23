@@ -228,22 +228,22 @@ class _State extends State<_Body> {
                     children: <Widget>[
                       Column(
                         children: <Widget>[
-                          FlatButton(
+                          TextButton(
                             child: const Text('添加'),
                             onPressed: _add,
                           ),
-                          FlatButton(
+                          TextButton(
                             child: const Text('删除'),
                             onPressed:
                                 (selectedPolylineId == null) ? null : _remove,
                           ),
-                          FlatButton(
+                          TextButton(
                             child: const Text('修改线宽'),
                             onPressed: (selectedPolylineId == null)
                                 ? null
                                 : _changeWidth,
                           ),
-                          FlatButton(
+                          TextButton(
                             child: const Text('修改透明度'),
                             onPressed: (selectedPolylineId == null)
                                 ? null
@@ -260,31 +260,31 @@ class _State extends State<_Body> {
                       ),
                       Column(
                         children: <Widget>[
-                          FlatButton(
+                          TextButton(
                             child: const Text('修改颜色'),
                             onPressed: (selectedPolylineId == null)
                                 ? null
                                 : _changeColor,
                           ),
-                          FlatButton(
+                          TextButton(
                             child: const Text('修改线头样式'),
                             onPressed: (selectedPolylineId == null)
                                 ? null
                                 : _changeCapType,
                           ),
-                          FlatButton(
+                          TextButton(
                             child: const Text('修改连接样式'),
                             onPressed: (selectedPolylineId == null)
                                 ? null
                                 : _changeJointType,
                           ),
-                          FlatButton(
+                          TextButton(
                             child: const Text('修改虚线类型'),
                             onPressed: (selectedPolylineId == null)
                                 ? null
                                 : _changeDashLineType,
                           ),
-                          FlatButton(
+                          TextButton(
                             child: const Text('修改坐标'),
                             onPressed: (selectedPolylineId == null)
                                 ? null

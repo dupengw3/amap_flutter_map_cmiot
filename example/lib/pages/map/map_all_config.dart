@@ -116,6 +116,10 @@ class _MapUiBodyState extends State<_MapUiBody> {
         print("onVisiableRegionMoveEnd=>");
         print(argument.toString());
       },
+      onGeocodeSearchError: (argument) {
+        print(argument);
+      },
+
     );
 
     Widget _mapTypeRadio(String label, MapType radioValue) {
@@ -150,6 +154,7 @@ class _MapUiBodyState extends State<_MapUiBody> {
         label: Text('显示路况'),
         defaultValue: _trafficEnabled,
         onSwitchChanged: (value) => {
+
           setState(() {
             _trafficEnabled = value;
           })
@@ -333,7 +338,7 @@ class _MapUiBodyState extends State<_MapUiBody> {
           _myLocationStyleContainer(),
           _uiOptionsWidget(),
           _gesturesOptiosWeidget(),
-          FlatButton(
+          TextButton(
             child: const Text('moveCamera到首开'),
             onPressed: _moveCameraToShoukai,
           ),
@@ -379,6 +384,20 @@ class _MapUiBodyState extends State<_MapUiBody> {
         await _controller?.getSatelliteImageApprovalNumber();
     print('地图审图号（普通地图）: $mapContentApprovalNumber');
     print('地图审图号（卫星地图): $satelliteImageApprovalNumber');
+    LatLng latlng =
+        await _controller?.goecodeSearch("北京");
+        print("goecodeSearch--------,,,....>");
+        print(latlng.latitude);
+        print( latlng.longitude);
+     String address = await _controller?.reGoecodeSearch(latlng);
+         print("reGoecodeSearch--------,,,....>");
+        print(address);
+        RegionBounds bound = await _controller.getCurrentVisiableRegion();
+         print("getCurrentVisiableRegion--------,,,....>");
+        print(bound.northeast.latitude);
+        print(bound.northeast.longitude);
+
+
   }
 
   Widget createGridView(List<Widget> widgets) {

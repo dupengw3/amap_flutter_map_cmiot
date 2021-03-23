@@ -150,6 +150,13 @@ class AMapController {
           (CameraVisiableRegionMoveEndEvent e) =>
               _mapState.widget.onVisiableRegionMoveEnd(e.value));
     }
+
+     if (_mapState.widget.onGeocodeSearchError != null) {
+      _methodChannel.onGeocodeSearchError(mapId: mapId).listen(
+          (GeocodeSearchErrorEvent e) =>
+              _mapState.widget.onGeocodeSearchError(e.value));
+    }
+
     if (_mapState.widget.onTap != null) {
       _methodChannel
           .onMapTap(mapId: mapId)
@@ -222,6 +229,24 @@ class AMapController {
   Future<void> setRenderFps(int fps) {
     return _methodChannel.setRenderFps(fps, mapId: mapId);
   }
+
+///地址编码
+  Future<LatLng> goecodeSearch(String address) {
+    return _methodChannel.goecodeSearch(address, mapId: mapId);
+  }
+
+///逆地址编码
+  Future<String> reGoecodeSearch(LatLng latlng) {
+    return _methodChannel.reGoecodeSearch(latlng, mapId: mapId);
+  }
+   //获取当前显示范围
+   Future<RegionBounds> getCurrentVisiableRegion() {
+    Future<RegionBounds>  obj = _methodChannel.getCurrentVisiableRegion(mapId: mapId);
+    
+    return obj;
+  }
+  
+   
 
   ///地图截屏
   Future<Uint8List> takeSnapshot() {

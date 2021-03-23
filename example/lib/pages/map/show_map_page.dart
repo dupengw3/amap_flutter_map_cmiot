@@ -18,7 +18,7 @@ class _ShowMapPageBody extends StatefulWidget {
 }
 
 class _ShowMapPageState extends State<_ShowMapPageBody> {
-  List<Widget> _approvalNumberWidget = List<Widget>();
+  List<Widget> _approvalNumberWidget = [];
   @override
   Widget build(BuildContext context) {
     final AMapWidget map = AMapWidget(

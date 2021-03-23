@@ -139,9 +139,16 @@ class MethodChannelAMapFlutterMap implements AMapFlutterPlatform {
     return _events(mapId).whereType<CameraPositionMoveEndEvent>();
   }
 
-   ///Camera 移动结束回调
+   ///显示区域改变结束回调
   Stream<CameraVisiableRegionMoveEndEvent> onVisiableRegionMoveEnd({@required int mapId}) {
     return _events(mapId).whereType<CameraVisiableRegionMoveEndEvent>();
+  }
+
+
+
+ ///逆地理编码、地理编码搜索失败回调
+  Stream<GeocodeSearchErrorEvent> onGeocodeSearchError({@required int mapId}) {
+    return _events(mapId).whereType<GeocodeSearchErrorEvent>();
   }
 
 
@@ -169,7 +176,7 @@ class MethodChannelAMapFlutterMap implements AMapFlutterPlatform {
     return _events(mapId).whereType<PolylineTapEvent>();
   }
 
-  Future<dynamic> _handleMethodCall(MethodCall call, int mapId) async {
+  Future<void> _handleMethodCall(MethodCall call, int mapId) async {
     switch (call.method) {
       case 'location#changed':
         try {
@@ -237,6 +244,14 @@ class MethodChannelAMapFlutterMap implements AMapFlutterPlatform {
           print('map#onPoiTouched error===>' + e.toString());
         }
         break;
+         case 'search#onGeocodeSearchError':
+        try {
+          _mapEventStreamController.add(GeocodeSearchErrorEvent(
+              mapId, call.arguments));
+        } catch (e) {
+          print("search#onGeocodeSearchError error===>" + e.toString());
+        }
+        break;
     }
   }
 
@@ -254,6 +269,8 @@ class MethodChannelAMapFlutterMap implements AMapFlutterPlatform {
     });
   }
 
+
+
   ///设置地图每秒渲染的帧数
   Future<void> setRenderFps(int fps, {@required int mapId}) {
     return channel(mapId)
@@ -261,6 +278,28 @@ class MethodChannelAMapFlutterMap implements AMapFlutterPlatform {
       'fps': fps,
     });
   }
+
+
+Future<LatLng> goecodeSearch(String address, {@required int mapId}) async{
+    var json = await channel(mapId)
+        .invokeMethod<List>('search#goecodeSearch', <String, dynamic>{
+      'address': address,
+    });
+     return LatLng.fromJson(json);
+
+  }
+   Future<String> reGoecodeSearch(LatLng latlng, {@required int mapId}) {
+    return channel(mapId)
+        .invokeMethod<String>('search#reGoecodeSearch', latlng.toJson());
+  }
+
+ Future<RegionBounds> getCurrentVisiableRegion({@required int mapId}) async{
+   var json = await channel(mapId)
+        .invokeMethod<Map>('map#visibleMapBounds');
+
+     return RegionBounds.fromMap(json);
+  }
+
 
   ///截屏
   Future<Uint8List> takeSnapshot({
@@ -277,12 +316,12 @@ class MethodChannelAMapFlutterMap implements AMapFlutterPlatform {
   }
 
 
-// //获取地图审图号（普通地图）
-//   Future<dynamic> getMapvisibleMapBounds({
-//     @required int mapId,
-//   }) {
-//     return channel(mapId).invokeMethod<dynamic>('map#visibleMapBounds');
-//   }
+
+  Future<void> getMapvisibleMapBounds({
+    @required int mapId,
+  }) {
+    return channel(mapId).invokeMethod<dynamic>('map#visibleMapBounds');
+  }
 
 
   //获取地图审图号（卫星地图）

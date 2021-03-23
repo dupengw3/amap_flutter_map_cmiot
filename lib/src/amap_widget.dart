@@ -77,6 +77,9 @@ class AMapWidget extends StatefulWidget {
   /// 相机视角区域移动结束的回调
   final ArgumentCallback<RegionBounds> onVisiableRegionMoveEnd;
 
+ /// 地理编码搜索失败的回调
+  final ArgumentCallback<String> onGeocodeSearchError;
+
   /// 地图单击事件的回调
   final ArgumentCallback<LatLng> onTap;
 
@@ -119,6 +122,7 @@ class AMapWidget extends StatefulWidget {
     this.onCameraMove,
     this.onCameraMoveEnd,
     this.onVisiableRegionMoveEnd,
+    this.onGeocodeSearchError,
     this.onLocationChanged,
     this.onTap,
     this.onLongPress,

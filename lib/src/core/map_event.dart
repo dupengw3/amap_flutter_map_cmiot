@@ -33,10 +33,22 @@ class CameraPositionMoveEndEvent extends MapEvent<CameraPosition> {
       : super(mapId, value);
 }
 
+
+
+///显示区域改变结束回调
 class CameraVisiableRegionMoveEndEvent extends MapEvent<RegionBounds> {
   CameraVisiableRegionMoveEndEvent(int mapId,RegionBounds value)
       : super(mapId, value);
 }
+
+
+
+///逆地理编码、地理编码搜索失败回调
+class GeocodeSearchErrorEvent extends MapEvent<String> {
+  GeocodeSearchErrorEvent(int mapId,String value)
+      : super(mapId, value);
+}
+
 
 ///点击地图回调
 class MapTapEvent extends MapEvent<LatLng> {
