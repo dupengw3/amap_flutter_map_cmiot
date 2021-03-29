@@ -134,9 +134,12 @@
     return _search;
 }
 
-- (void)goecodeSearchBegin:(NSString *)address{
+- (void)goecodeSearchBegin:(NSString *)address city:(NSString *)city{
     AMapGeocodeSearchRequest *geo = [[AMapGeocodeSearchRequest alloc] init];
     geo.address = address;
+    if (city != nil){
+        geo.city = city;
+    }
     [self.search AMapGeocodeSearch:geo];
 }
 
@@ -258,9 +261,11 @@
     
     [self.channel addMethodName:@"search#goecodeSearch" withHandler:^(FlutterMethodCall * _Nonnull call, FlutterResult  _Nonnull result) {
         NSString *address = call.arguments[@"address"];
+        NSString *city = call.arguments[@"city"];
+
         NSLog(@"goecodeSearchBegin=>");
         NSLog(@"%@", address);
-        [weakSelf goecodeSearchBegin:address];
+        [weakSelf goecodeSearchBegin:address city:city];
         weakSelf.goecodeSearchResult = result;
     }];
     
@@ -285,6 +290,7 @@
 {
     if (response.geocodes.count == 0)
     {
+        [_channel invokeMethod:@"search#onGeocodeSearchError" arguments:@"搜索结果为空"];
 
         return;
     }
@@ -306,6 +312,7 @@
         _reGoecodeSearchResult(response.regeocode.formattedAddress);
 
     }
+    [_channel invokeMethod:@"search#onGeocodeSearchError" arguments:@"搜索结果为空"];
 }
 
 - (void)AMapSearchRequest:(id)request didFailWithError:(NSError *)error

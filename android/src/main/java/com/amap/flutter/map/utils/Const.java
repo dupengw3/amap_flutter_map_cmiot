@@ -19,6 +19,8 @@ public class Const {
     public static final String METHOD_MAP_TAKE_SNAPSHOT = "map#takeSnapshot";
     public static final String METHOD_MAP_CLEAR_DISK = "map#clearDisk";
     public static final String METHOD_MAP_VISIABLE_MAPBOUNDS = "map#visibleMapBounds";
+    public static final String METHOD_SEARCH_GOE_CODE = "search#goecodeSearch";
+    public static final String METHOD_SEARCH_REGOE_CODE = "search#reGoecodeSearch";
 
     public static final String[] METHOD_ID_LIST_FOR_MAP = {
             METHOD_MAP_CONTENT_APPROVAL_NUMBER,
@@ -28,7 +30,9 @@ public class Const {
             METHOD_MAP_MOVE_CAMERA,
             METHOD_MAP_SET_RENDER_FPS,
             METHOD_MAP_TAKE_SNAPSHOT,
-            METHOD_MAP_CLEAR_DISK};
+            METHOD_MAP_CLEAR_DISK,
+            METHOD_SEARCH_GOE_CODE,
+            METHOD_SEARCH_REGOE_CODE};
 
 
     /**

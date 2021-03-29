@@ -231,8 +231,8 @@ class AMapController {
   }
 
 ///地址编码
-  Future<LatLng> goecodeSearch(String address) {
-    return _methodChannel.goecodeSearch(address, mapId: mapId);
+  Future<LatLng> goecodeSearch(String address,{String city}) {
+    return _methodChannel.goecodeSearch(address, mapId: mapId, city: city);
   }
 
 ///逆地址编码

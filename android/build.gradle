@@ -34,5 +34,6 @@ android {
 
 dependencies {
     compileOnly 'com.amap.api:3dmap:7.6.0'
+    compileOnly 'com.amap.api:search:7.6.0'
 }
 

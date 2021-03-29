@@ -2,7 +2,7 @@ package com.amap.flutter.map.core;
 
 import android.graphics.Bitmap;
 import android.location.Location;
-
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -16,6 +16,16 @@ import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.LatLngBounds;
 import com.amap.api.maps.model.MyLocationStyle;
 import com.amap.api.maps.model.Poi;
+import com.amap.api.maps.model.VisibleRegion;
+import com.amap.api.services.core.AMapException;
+import com.amap.api.services.core.LatLonPoint;
+import com.amap.api.services.geocoder.GeocodeAddress;
+import com.amap.api.services.geocoder.GeocodeQuery;
+import com.amap.api.services.geocoder.GeocodeResult;
+import com.amap.api.services.geocoder.GeocodeSearch;
+import com.amap.api.services.geocoder.RegeocodeAddress;
+import com.amap.api.services.geocoder.RegeocodeQuery;
+import com.amap.api.services.geocoder.RegeocodeResult;
 import com.amap.flutter.map.MyMethodCallHandler;
 import com.amap.flutter.map.utils.Const;
 import com.amap.flutter.map.utils.ConvertUtil;
@@ -23,11 +33,12 @@ import com.amap.flutter.map.utils.LogUtil;
 
 import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
-import com.amap.api.maps.model.VisibleRegion;
+
 /**
  * @author whm
  * @date 2020/11/11 7:00 PM
@@ -42,7 +53,8 @@ public class MapController
         AMap.OnCameraChangeListener,
         AMap.OnMapClickListener,
         AMap.OnMapLongClickListener,
-        AMap.OnPOIClickListener {
+        AMap.OnPOIClickListener,
+        GeocodeSearch.OnGeocodeSearchListener {
     private final MethodChannel methodChannel;
     private final AMap amap;
     private final TextureMapView mapView;
@@ -51,6 +63,10 @@ public class MapController
     private static final String CLASS_NAME = "MapController";
 
     private boolean mapLoaded = false;
+
+    private MethodChannel.Result geocoderResult;
+    private GeocodeSearch geocoderSearch;
+    private MethodChannel.Result reGeocoderResult;
 
     public MapController(MethodChannel methodChannel, TextureMapView mapView) {
         this.methodChannel = methodChannel;
@@ -63,6 +79,9 @@ public class MapController
         amap.addOnMapLongClickListener(this);
         amap.addOnMapClickListener(this);
         amap.addOnPOIClickListener(this);
+
+        geocoderSearch = new GeocodeSearch(mapView.getContext());
+        geocoderSearch.setOnGeocodeSearchListener(this);
     }
 
     @Override
@@ -102,7 +121,7 @@ public class MapController
                     LatLngBounds latLngBounds = visibleRegion.latLngBounds; //由可视区域的四个顶点形成的经纬度范围
                     LatLng southwest = latLngBounds.southwest; //西南角坐标
                     LatLng northeast = latLngBounds.northeast; //东北角坐标
-                    Map<String,Object> arguments = new HashMap<>(2);
+                    Map<String, Object> arguments = new HashMap<>(2);
                     arguments.put("southwest", ConvertUtil.latLngToList(southwest));
                     arguments.put("northeast", ConvertUtil.latLngToList(northeast));//
                     result.success(arguments);
@@ -154,6 +173,27 @@ public class MapController
                     amap.removecache();
                     result.success(null);
                 }
+                break;
+            case Const.METHOD_SEARCH_GOE_CODE: {
+                String address = call.argument("address");
+                String city = call.argument("city");
+                geocoderResult = result;
+                GeocodeQuery query = new GeocodeQuery(address, city);// 第一个参数表示地址，第二个参数表示查询城市，中文或者中文全拼，citycode、adcode，
+                geocoderSearch.getFromLocationNameAsyn(query);// 设置同步地理编码请求
+            }
+            break;
+
+            case Const.METHOD_SEARCH_REGOE_CODE:
+                List<Double> latLng = (List<Double>) call.arguments;
+
+                double lat = latLng.get(0);
+                double lng = latLng.get(1);
+
+                reGeocoderResult = result;
+                LatLonPoint latLonPoint = new LatLonPoint(lat, lng);
+                RegeocodeQuery query = new RegeocodeQuery(latLonPoint, 200,
+                        GeocodeSearch.AMAP);// 第一个参数表示一个Latlng，第二参数表示范围多少米，第三个参数表示是火系坐标系还是GPS原生坐标系
+                geocoderSearch.getFromLocationAsyn(query);
                 break;
             default:
                 LogUtil.w(CLASS_NAME, "onMethodCall not find methodId:" + call.method);
@@ -313,15 +353,15 @@ public class MapController
             LatLngBounds latLngBounds = visibleRegion.latLngBounds; //由可视区域的四个顶点形成的经纬度范围
             LatLng southwest = latLngBounds.southwest; //西南角坐标
             LatLng northeast = latLngBounds.northeast; //东北角坐标
-            Map<String,Object> arguments2 = new HashMap<>(2);
+            Map<String, Object> arguments2 = new HashMap<>(2);
             arguments2.put("southwest", ConvertUtil.latLngToList(southwest));
             arguments2.put("northeast", ConvertUtil.latLngToList(northeast));//
-            final  Map<String,Object> mapData = new HashMap<>(1);
-            mapData.put("region",arguments2);
-            System.out.println(southwest.latitude+" "+southwest.longitude);
-            methodChannel.invokeMethod("camera#onVisiableRegionMoveEnd",mapData);
+            final Map<String, Object> mapData = new HashMap<>(1);
+            mapData.put("region", arguments2);
+            System.out.println(southwest.latitude + " " + southwest.longitude);
+            methodChannel.invokeMethod("camera#onVisiableRegionMoveEnd", mapData);
             LogUtil.i(CLASS_NAME, "onVisiableRegionMoveEnd==>" + mapData.get("region"));
-            
+
         }
     }
 
@@ -389,5 +429,78 @@ public class MapController
         //不实现
     }
 
+    @Override
+    public void onRegeocodeSearched(RegeocodeResult result, int rCode) {
+        if (rCode == AMapException.CODE_AMAP_SUCCESS) {
+            if (result != null && result.getRegeocodeAddress() != null
+                    && result.getRegeocodeAddress().getFormatAddress() != null) {
+                RegeocodeAddress regeocodeAddress = result.getRegeocodeAddress();
+                String addressName = regeocodeAddress.getFormatAddress();
 
+                Log.w("xxxx", "addressName= " + addressName);
+
+
+//                Map<String, Object> r = new Map();
+//                reGeocoderResult.success(r);
+//                aMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
+//                        AMapUtil.convertToLatLng(latLonPoint), 15));
+                //regeoMarker.setPosition(AMapUtil.convertToLatLng(latLonPoint));
+                //ToastUtil.show(ReGeocoderActivity.this, addressName);
+//                final Map<String, Object> arguments = new HashMap<String, Object>();
+//                arguments.put("country", regeocodeAddress.getCountry());
+//                arguments.put("countryCode", regeocodeAddress.getCountryCode());
+//
+//                arguments.put("province", regeocodeAddress.getProvince());
+//
+//                arguments.put("city", regeocodeAddress.getCity());
+//                arguments.put("cityCode", regeocodeAddress.getCityCode());
+//
+//                arguments.put("district", regeocodeAddress.getDistrict());
+//                arguments.put("adCode", regeocodeAddress.getAdCode());
+//
+//                arguments.put("address", regeocodeAddress.getFormatAddress());
+
+                reGeocoderResult.success(addressName);
+            } else {
+                reGeocoderResult.error("-1", "未找到地址", "没有找到地址对于的坐标");
+            }
+        } else {
+            reGeocoderResult.error(String.valueOf(rCode), "错误", "错误代码 : " + rCode);
+        }
+
+        reGeocoderResult = null;
+    }
+
+    @Override
+    public void onGeocodeSearched(GeocodeResult result, int rCode) {
+        if (rCode == AMapException.CODE_AMAP_SUCCESS) {
+            if (result != null && result.getGeocodeAddressList() != null
+                    && result.getGeocodeAddressList().size() > 0) {
+                GeocodeAddress address = result.getGeocodeAddressList().get(0);
+                Log.w("xxxx", "addressName= " + address);
+                if (address != null) {
+//                    aMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
+//                            AMapUtil.convertToLatLng(address.getLatLonPoint()), 15));
+//                    geoMarker.setPosition(AMapUtil.convertToLatLng(address
+//                            .getLatLonPoint()));
+                    LatLonPoint point = address.getLatLonPoint();
+                    String addressName = "经纬度值:" + point + "\n位置描述:"
+                            + address.getFormatAddress();
+
+//                    final Map<String, Object> arguments = new HashMap<String, Object>(10);
+//                    arguments.put("lat", point.getLatitude());
+//                    arguments.put("lng", point.getLongitude());
+//                    arguments.put("address", addressName);
+                    double[] r = {point.getLatitude(), point.getLongitude()};
+
+                    geocoderResult.success(r);
+                }
+            } else {
+                geocoderResult.error("-1", "未找到地址", "没有找到坐标对于的地址");
+            }
+        } else {
+            geocoderResult.error(String.valueOf(rCode), "错误", "错误代码 : " + rCode);
+        }
+        geocoderResult = null;
+    }
 }

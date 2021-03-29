@@ -1,9 +1,3 @@
-import 'package:amap_flutter_map_example/pages/overlays/marker_add_after_map.dart';
-import 'package:amap_flutter_map_example/pages/overlays/marker_add_with_map.dart';
-import 'package:amap_flutter_map_example/pages/overlays/marker_config.dart';
-import 'package:amap_flutter_map_example/pages/overlays/marker_custom_icon.dart';
-import 'package:amap_flutter_map_example/pages/overlays/place_polygon.dart';
-import 'package:amap_flutter_map_example/pages/overlays/place_polyline.dart';
 import 'package:amap_flutter_map_example/pages/interactive/map_gestures_options.dart';
 import 'package:amap_flutter_map_example/pages/interactive/map_ui_options.dart';
 import 'package:amap_flutter_map_example/pages/interactive/move_camera_demo.dart';
@@ -17,8 +11,16 @@ import 'package:amap_flutter_map_example/pages/map/map_my_location.dart';
 import 'package:amap_flutter_map_example/pages/map/min_max_zoom.dart';
 import 'package:amap_flutter_map_example/pages/map/multi_map.dart';
 import 'package:amap_flutter_map_example/pages/map/show_map_page.dart';
+import 'package:amap_flutter_map_example/pages/overlays/marker_add_after_map.dart';
+import 'package:amap_flutter_map_example/pages/overlays/marker_add_with_map.dart';
+import 'package:amap_flutter_map_example/pages/overlays/marker_config.dart';
+import 'package:amap_flutter_map_example/pages/overlays/marker_custom_icon.dart';
+import 'package:amap_flutter_map_example/pages/overlays/place_polygon.dart';
+import 'package:amap_flutter_map_example/pages/overlays/place_polyline.dart';
 import 'package:amap_flutter_map_example/pages/overlays/polyline_geodesic.dart';
 import 'package:amap_flutter_map_example/pages/overlays/polyline_texture.dart';
+import 'package:amap_flutter_map_example/pages/search/geocoder_page.dart';
+import 'package:amap_flutter_map_example/pages/search/regeocoder_page.dart';
 import 'package:amap_flutter_map_example/widgets/demo_group.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -56,6 +58,11 @@ final List<BasePage> _overlayPages = <BasePage>[
   PolylineGeodesicDemoPage('Polyline大地曲线', '演示大地曲线的添加'),
   PolylineTextureDemoPage('Polyline纹理线', '演示纹理线的添加'),
   PolygonDemoPage('Polygon操作', '演示Polygon的相关属性的操作'),
+];
+
+final List<BasePage> _searchPages = <BasePage>[
+  GeocoderDemoPage('地理编码', '地理编码'),
+  ReGeocoderDemoPage('逆地理编码功能介绍', '逆地理编码功能介绍'),
 ];
 
 final List<Permission> needPermissionList = [
@@ -118,6 +125,10 @@ class DemoWidget extends State<AMapDemo> {
                 DemoGroupWidget(
                   groupLabel: '绘制线和面',
                   itemPages: _overlayPages,
+                ),
+                DemoGroupWidget(
+                  groupLabel: '地理编码与逆地理编码功能介绍',
+                  itemPages: _searchPages,
                 ),
               ],
             ),

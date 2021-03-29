@@ -1,6 +1,5 @@
 import 'package:amap_flutter_map_example/base_page.dart';
 import 'package:amap_flutter_map_example/widgets/amap_switch_button.dart';
-import 'package:amap_flutter_map_example/widgets/bottons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 

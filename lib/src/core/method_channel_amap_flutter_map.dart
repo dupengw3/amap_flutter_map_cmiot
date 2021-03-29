@@ -279,11 +279,12 @@ class MethodChannelAMapFlutterMap implements AMapFlutterPlatform {
     });
   }
 
-
-Future<LatLng> goecodeSearch(String address, {@required int mapId}) async{
+  ///
+Future<LatLng> goecodeSearch(String address, {@required int mapId, String city}) async{
     var json = await channel(mapId)
         .invokeMethod<List>('search#goecodeSearch', <String, dynamic>{
       'address': address,
+      'city': city
     });
      return LatLng.fromJson(json);
 

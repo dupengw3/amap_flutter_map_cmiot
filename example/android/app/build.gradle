@@ -62,6 +62,10 @@ android {
             minifyEnabled false //删除无用代码
             shrinkResources false //删除无用资源
         }
+
+        debug {
+            signingConfig signingConfigs.debug
+        }
     }
     sourceSets {
         main {
